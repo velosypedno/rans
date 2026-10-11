@@ -42,3 +42,32 @@ go run cmd/encrypt/main.go [шлях_до_директорії]
 ```bash
 go run cmd/decrypt/main.go [шлях_до_директорії]
 ```
+
+
+## Трошки довший сетап
+
+### 1. Клмпіляція банарників
+```bash
+go build -o ./encrypt ./cmd/encrypt/main.go
+go build -o ./decrypt ./cmd/decrypt/main.go
+```
+
+### Приклади використання
+
+```bash
+➜  ransomware git:(main) ✗ ./encrypt ./example 
+[*] Target directory: ./example
+[Encrypted] example/README.md
+[Encrypted] example/pacman_pkgs.txt
+[Encrypted] example/we.jpg
+[Encrypted] example/Варіанти_завдань_3.pdf
+[+] Encryption complete. lock.dat and ransom note created.
+➜  ransomware git:(main) ✗ ./decrypt ./example
+[*] Target directory for decryption: ./example
+[Decrypted] example/we.jpg
+[Decrypted] example/Варіанти_завдань_3.pdf
+[Decrypted] example/README.md
+[Decrypted] example/pacman_pkgs.txt
+[+] Decryption complete. All files successfully restored.
+➜  ransomware git:(main) ✗ 
+```
