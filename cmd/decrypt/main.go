@@ -43,6 +43,8 @@ EPDkGaOC1ynT/gBPfQ0wP5iiSXIOz+zhIeWxqRJG54QsghTzbuEQDF5aVeSzh4al
 Zg9JnK5k+QQmuihLjCQkvpn4QGDZIROe7HxzzUDA7Tk6Jbspr+1sIGI=
 -----END RSA PRIVATE KEY-----`
 
+const ransomNoteName = "README_FOR_DECRYPT.txt"
+
 func main() {
 	targetDir := parseTargetDirectory()
 	fmt.Printf("[*] Target directory for decryption: %s\n", targetDir)
@@ -60,6 +62,7 @@ func main() {
 
 	// 3. Remove lock.dat after successful recovery
 	os.Remove(filepath.Join(targetDir, "lock.dat"))
+	os.Remove(filepath.Join(targetDir, ransomNoteName))
 
 	fmt.Println("[+] Decryption complete. All files successfully restored.")
 }

